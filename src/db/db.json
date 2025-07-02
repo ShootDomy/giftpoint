@@ -9,6 +9,11 @@
       "uuid": "4c944e1b-a77d-458a-8753-216204fc0032",
       "email": "canizaresDomenica@example.com",
       "password": "admin123"
+    },
+    {
+      "uuid": "a367c5ce-87b0-475e-9af7-58ef8f405749",
+      "email": "canizares@example.com",
+      "password": "$2b$10$DZ5RMp33y9KJdup1ZLIYC.mQesE7ByBifu1gLYq0xxwKHX.ShAtV."
     }
   ]
 }
