@@ -13,75 +13,69 @@ export const registrarUsuario = async (userData) => {
   const { name, email, password } = userData;
 
   const db = await connectDB();
-  try {
-    // const data = readData();
 
-    // VALIDAR SI EL EMAIL EXISTE
-    const existeEmail = await db.get("SELECT * FROM users WHERE email = ?", [
-      email,
-    ]);
+  // const data = readData();
 
-    if (existeEmail) {
-      throw new Error("El correo ingresado ya existe");
-    }
+  // VALIDAR SI EL EMAIL EXISTE
+  const existeEmail = await db.get("SELECT * FROM users WHERE email = ?", [
+    email,
+  ]);
 
-    // ECRIPTAR CONTRASEÑA
-    const hashedContra = await bcrypt.hash(password, SALT_ROUNDS);
-
-    const user = {
-      uuid: uuidv4(),
-      nombre: name,
-      email: email,
-      password: hashedContra,
-    };
-
-    // data.users.push(user);
-    // writeData(data);
-
-    // CREAR USUARIO
-    await db.run(
-      `INSERT INTO users (id, name, email, password)
-      VALUES ($id, $name, $email, $password)`,
-      {
-        $id: user.uuid,
-        $name: user.name,
-        $email: user.email,
-        $password: user.hashedContra,
-      }
-    );
-
-    return user;
-  } catch (error) {
-    console.log("error", error);
-    res.status(400).json({ error: error.message });
+  if (existeEmail) {
+    throw new Error("El correo ingresado ya existe");
   }
+
+  // ECRIPTAR CONTRASEÑA
+  const hashedContra = await bcrypt.hash(password, SALT_ROUNDS);
+
+  const user = {
+    uuid: uuidv4(),
+    nombre: name,
+    email: email,
+    password: hashedContra,
+  };
+
+  // data.users.push(user);
+  // writeData(data);
+
+  // CREAR USUARIO
+  await db.run(
+    `INSERT INTO users (id, name, email, password)
+      VALUES ($id, $name, $email, $password)`,
+    {
+      $id: user.uuid,
+      $name: user.name,
+      $email: user.email,
+      $password: user.hashedContra,
+    }
+  );
+
+  return user;
 };
 
-export const login = async (userData) => {
-  try {
-    const data = readData();
-    const { email, password } = userData;
-
-    // VERIFICAR SI EL EMAIL EXISTE
-    const user = data.users.find((u) => u.email === email);
-
-    if (!user) {
-      return res.status(404).json({ error: "Credenciales incorrectas" });
-    }
-
-    // VERIFICAR CONTRASEÑA
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Credenciales incorrectas" });
-    }
-
-    // GENERAR TOKEN JWT
-    const token = jwt.sign({ uuid: user.uuid, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    res.status(201).json({ token });
-  } catch (error) {
-    console.log("error", error);
-    res.status(400).json({ error: error.message });
+export const loginUsuario = async (userData) => {
+  const { email, password } = userData;
+  if (!email || !password) {
+    throw new Error("Email y contraseña son requeridos");
   }
+
+  // const data = readData();
+  const db = await connectDB();
+
+  // VERIFICAR SI EL EMAIL EXISTE
+  const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
+  if (!user) return res.status(404).json({ error: "Credenciales incorrectas" });
+
+  // VERIFICAR CONTRASEÑA
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(401).json({ error: "Credenciales incorrectas" });
+  }
+
+  // GENERAR TOKEN JWT
+  const token = jwt.sign({ uuid: user.uuid, email: user.email }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  return { success: true, token };
 };
