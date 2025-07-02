@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "uuid": "b17f5c4b-40c6-43b3-a5a9-17e34e51c409",
+      "email": "dfvintimilla@example.com",
+      "password": "admin123"
+    },
+    {
+      "uuid": "4c944e1b-a77d-458a-8753-216204fc0032",
+      "email": "canizaresDomenica@example.com",
+      "password": "admin123"
+    }
+  ]
+}
