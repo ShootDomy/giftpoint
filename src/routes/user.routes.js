@@ -6,10 +6,11 @@ import {
   putUser,
   deleteUserCtrl,
 } from "../controllers/user.controller.js";
+import { verifyToken } from "../middlewares/verifyToken.js";
 
 const router = express.Router();
 
-router.get("/", getUsers);
+router.get("/", verifyToken, getUsers);
 router.get("/:id", getUser);
 router.post("/", postUser);
 router.put("/:id", putUser);

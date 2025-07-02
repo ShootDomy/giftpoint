@@ -1,30 +1,87 @@
-import { readData, writeData } from "../config/db.js";
+// import { readData, writeData } from "../config/db.js";
+import { connectDB } from "../db/database.js";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 
 const SALT_ROUNDS = 10;
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const registrarUsuario = async (userData) => {
-  const data = readData();
+  const { name, email, password } = userData;
 
-  // VALIDAR SI EL EMAIL EXISTE
-  const existeEmail = data.users.find((u) => u.email === userData.email);
-  if (existeEmail) {
-    throw new Error("Usuario ya registrado");
+  const db = await connectDB();
+  try {
+    // const data = readData();
+
+    // VALIDAR SI EL EMAIL EXISTE
+    const existeEmail = await db.get("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (existeEmail) {
+      throw new Error("El correo ingresado ya existe");
+    }
+
+    // ECRIPTAR CONTRASEÑA
+    const hashedContra = await bcrypt.hash(password, SALT_ROUNDS);
+
+    const user = {
+      uuid: uuidv4(),
+      nombre: name,
+      email: email,
+      password: hashedContra,
+    };
+
+    // data.users.push(user);
+    // writeData(data);
+
+    // CREAR USUARIO
+    await db.run(
+      `INSERT INTO users (id, name, email, password)
+      VALUES ($id, $name, $email, $password)`,
+      {
+        $id: user.uuid,
+        $name: user.name,
+        $email: user.email,
+        $password: user.hashedContra,
+      }
+    );
+
+    return user;
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json({ error: error.message });
   }
+};
 
-  // ECRIPTAR CONTRASEÑA
-  const hashedContra = await bcrypt.hash(userData.password, SALT_ROUNDS);
+export const login = async (userData) => {
+  try {
+    const data = readData();
+    const { email, password } = userData;
 
-  // CREAR USUARIO
-  const user = {
-    uuid: uuidv4(),
-    email: userData.email,
-    password: hashedContra,
-  };
+    // VERIFICAR SI EL EMAIL EXISTE
+    const user = data.users.find((u) => u.email === email);
 
-  data.users.push(user);
-  writeData(data);
+    if (!user) {
+      return res.status(404).json({ error: "Credenciales incorrectas" });
+    }
 
-  return user;
+    // VERIFICAR CONTRASEÑA
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: "Credenciales incorrectas" });
+    }
+
+    // GENERAR TOKEN JWT
+    const token = jwt.sign({ uuid: user.uuid, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json({ error: error.message });
+  }
 };
