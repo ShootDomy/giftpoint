@@ -28,6 +28,7 @@ export const registrarUsuario = async (userData) => {
   // ECRIPTAR CONTRASEÑA
   const hashedContra = await bcrypt.hash(password, SALT_ROUNDS);
 
+  // CREAR USUARIO
   const user = {
     uuid: uuidv4(),
     nombre: name,
@@ -38,7 +39,6 @@ export const registrarUsuario = async (userData) => {
   // data.users.push(user);
   // writeData(data);
 
-  // CREAR USUARIO
   await db.run(
     `INSERT INTO users (id, name, email, password)
       VALUES ($id, $name, $email, $password)`,
@@ -46,11 +46,11 @@ export const registrarUsuario = async (userData) => {
       $id: user.uuid,
       $name: user.name,
       $email: user.email,
-      $password: user.hashedContra,
+      $password: user.password,
     }
   );
 
-  return user;
+  return { success: true, user };
 };
 
 export const loginUsuario = async (userData) => {
@@ -65,6 +65,8 @@ export const loginUsuario = async (userData) => {
   // VERIFICAR SI EL EMAIL EXISTE
   const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
   if (!user) return res.status(404).json({ error: "Credenciales incorrectas" });
+
+  console.log("user", user);
 
   // VERIFICAR CONTRASEÑA
   const isMatch = await bcrypt.compare(password, user.password);

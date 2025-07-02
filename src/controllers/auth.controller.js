@@ -13,8 +13,8 @@ export const registrar = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const token = await loginUsuario(req.body);
-    res.status(201).json({ token });
+    const data = await loginUsuario(req.body);
+    res.status(201).json(data);
   } catch (error) {
     console.log("error", error);
     res.status(400).json({ error: error.message });
