@@ -81,3 +81,31 @@ export const eliminarGiftcard = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const transferirAmountGift = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { sourceCardId, destinationCardId, amount } = req.body;
+
+    if (!userId || !sourceCardId || !destinationCardId || !amount) {
+      return res.status(400).json({
+        error:
+          "Faltan parámetros (userId, sourceCardId, destinationCardId o amount)",
+      });
+    }
+
+    const data = {
+      userId,
+      sourceCardId,
+      destinationCardId,
+      amount,
+    };
+
+    const giftcard = await transferirAmountGift(data);
+
+    res.json(giftcard);
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json({ error: error.message });
+  }
+};

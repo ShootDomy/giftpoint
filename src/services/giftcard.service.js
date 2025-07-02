@@ -63,7 +63,6 @@ export const getGiftById = async (id) => {
   const db = await connectDB();
   const giftcard = await db.get(`SELECT * FROM giftcards WHERE id = $id`, {
     $id: id,
-    $user_id: userId,
   });
 
   db.close();
@@ -79,12 +78,14 @@ export const actualizarGift = async (id, data) => {
     throw new Error("NO SE HA ENCONTRADO GIFTCARD");
   }
 
+  giftcard.amount = data.amount;
+  giftcard.expiration_date = data.expiration_date;
+
   await db.run(
-    `UPDATE giftcards SET amount = $amount, currency = $currency, expiration_date = $expiration_date WHERE id = $id`,
+    `UPDATE giftcards SET amount = $amount, expiration_date = $expiration_date WHERE id = $id`,
     {
       $id: id,
       $amount: data.amount,
-      $currency: data.currency,
       $expiration_date: data.expiration_date,
     }
   );
@@ -94,7 +95,7 @@ export const actualizarGift = async (id, data) => {
   return giftcard;
 };
 
-export const eliminarGift = async (id) => {
+export const eliminarGift = async (id, userId) => {
   const db = await connectDB();
   const giftcard = await getGiftById(id);
 
@@ -113,7 +114,7 @@ export const eliminarGift = async (id) => {
   };
 };
 
-export const transferirAconunt = async (userId, data) => {
+export const transferirAmountGift = async (userId, data) => {
   const db = await connectDB();
 
   // VALIDACION DE GIFTCARDS
