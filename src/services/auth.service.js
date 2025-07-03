@@ -77,9 +77,9 @@ export const loginUsuario = async (userData) => {
   }
 
   // GENERAR TOKEN JWT
-  const token = jwt.sign({ uuid: user.uuid, email: user.email }, JWT_SECRET, {
+  const token = jwt.sign({ uuid: user.id, email: user.email }, JWT_SECRET, {
     expiresIn: "1h",
   });
 
-  return { success: true, token };
+  return { uuid: user.id, token };
 };
