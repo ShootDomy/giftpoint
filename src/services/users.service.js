@@ -1,9 +1,15 @@
 import { readData, writeData } from "../config/db.js";
 import { v4 as uuidv4 } from "uuid";
+import { connectDB } from "../db/database.js";
 
-export const getAllUsers = () => {
-  const data = readData();
-  return data.users;
+export const getAllUsers = async () => {
+  // const data = readData();
+  const db = await connectDB();
+  const users = await db.all(`SELECT * FROM users`);
+
+  db.close();
+  return users;
+  // return data.users;
 };
 
 export const getUserById = (id) => {

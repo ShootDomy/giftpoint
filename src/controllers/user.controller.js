@@ -7,8 +7,13 @@ import {
 } from "../services/users.service.js";
 
 export const getUsers = (req, res) => {
-  const users = getAllUsers();
-  res.json(users);
+  try {
+    const users = getAllUsers();
+    res.status(201).json(users);
+  } catch (error) {
+    console.log("error", error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
 export const getUser = (req, res) => {
