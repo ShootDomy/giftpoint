@@ -16,10 +16,11 @@ export const crearGift = async (data) => {
   const giftcard = { uuid: uuidv4(), ...data };
 
   await db.run(
-    `INSERT INTO giftcards (id, amount, currency, expiration_date, user_id)
-      VALUES ($id, $amount, $currency, $expiration_date, $user_id)`,
+    `INSERT INTO giftcards (id, name, amount, currency, expiration_date, user_id)
+      VALUES ($id, $name, $amount, $currency, $expiration_date, $user_id)`,
     {
       $id: giftcard.uuid,
+      $name: giftcard.name,
       $amount: giftcard.amount,
       $currency: giftcard.currency,
       $expiration_date: giftcard.expiration_date,
