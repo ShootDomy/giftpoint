@@ -64,14 +64,16 @@ export const loginUsuario = async (userData) => {
 
   // VERIFICAR SI EL EMAIL EXISTE
   const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
-  if (!user) return res.status(404).json({ error: "Credenciales incorrectas" });
+  if (!user) {
+    throw new Error("Credenciales incorrectas");
+  }
 
   console.log("user", user);
 
   // VERIFICAR CONTRASEÑA
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(401).json({ error: "Credenciales incorrectas" });
+    throw new Error("Credenciales incorrectas");
   }
 
   // GENERAR TOKEN JWT
