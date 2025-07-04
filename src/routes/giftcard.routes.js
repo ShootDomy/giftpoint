@@ -5,6 +5,7 @@ import {
   eliminarGiftcard,
   getGiftcardByIdAndUser,
   getGiftcardsByUser,
+  transferirAmountGiftcard,
 } from "../controllers/giftcard.controller.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 
@@ -15,6 +16,6 @@ router.get("/:id", verifyToken, getGiftcardsByUser);
 router.get("/:id/:userId", verifyToken, getGiftcardByIdAndUser);
 router.put("/:id", verifyToken, actualizarGiftcard);
 router.delete("/:id", verifyToken, eliminarGiftcard);
-// router.post("/transferir", transferirAconunt);
+router.post("/transferir", verifyToken, transferirAmountGiftcard);
 
 export default router;

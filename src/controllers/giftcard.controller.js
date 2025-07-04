@@ -4,6 +4,7 @@ import {
   getGiftByIdAndUser,
   eliminarGift,
   actualizarGift,
+  transferirAmountGift,
 } from "../services/giftcard.service.js";
 
 const isUUID = (str) =>
@@ -49,7 +50,8 @@ export const crearGiftcard = async (req, res) => {
 };
 
 export const getGiftcardsByUser = async (req, res) => {
-  const { id } = req.params;
+  const { idSource } = req.query;
+  console.log("idSource", idSource);
 
   // Validar UUID
   if (!isUUID(req.params.id)) {
@@ -57,7 +59,7 @@ export const getGiftcardsByUser = async (req, res) => {
   }
 
   try {
-    const giftcards = await getAllGiftcardsByUser(req.params.id);
+    const giftcards = await getAllGiftcardsByUser(req.params.id, idSource);
     res.json(giftcards);
   } catch (error) {
     console.log("error", error);
@@ -119,7 +121,7 @@ export const eliminarGiftcard = async (req, res) => {
   }
 };
 
-export const transferirAmountGift = async (req, res) => {
+export const transferirAmountGiftcard = async (req, res) => {
   try {
     const { userId } = req.params;
     const { sourceCardId, destinationCardId, amount } = req.body;

@@ -30,8 +30,14 @@ export const crearGift = async (data) => {
   return { success: true, giftcard };
 };
 
-export const getAllGiftcardsByUser = async (userId) => {
+export const getAllGiftcardsByUser = async (userId, idSource) => {
   const db = await connectDB();
+
+  let condicion = "";
+  if (idSource) {
+    condicion = ` AND id <> '${idSource}' `;
+  }
+
   const giftcards = await db.all(
     `SELECT id, name, amount, currency, expiration_date, user_id,
       CASE
@@ -39,7 +45,7 @@ export const getAllGiftcardsByUser = async (userId) => {
         ELSE false
       END AS expired
     FROM giftcards 
-    WHERE user_id = $user_id`,
+    WHERE user_id = $user_id  ${condicion}`,
     {
       $user_id: userId,
     }
