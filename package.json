@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
     "lint": "eslint . || exit 0",
     "pretest": "npm run lint",
     "prepare": "npm run lint || exit 0",
