@@ -16,6 +16,6 @@ router.get("/:id", verifyToken, getGiftcardsByUser);
 router.get("/:id/:userId", verifyToken, getGiftcardByIdAndUser);
 router.put("/:id", verifyToken, actualizarGiftcard);
 router.delete("/:id", verifyToken, eliminarGiftcard);
-router.post("/transferir", verifyToken, transferirAmountGiftcard);
+router.post("/transferir/:userId", verifyToken, transferirAmountGiftcard);
 
 export default router;
