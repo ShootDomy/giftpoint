@@ -2,14 +2,16 @@ import express from "express";
 import userRoutes from "./src/routes/user.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import giftcardRoutes from "./src/routes/giftcard.routes.js";
+import { responseTimeLogger } from "./src/middlewares/responseTimeLogger.js";
 
 const app = express();
-const port = 3000;
+// const port = 3000;
 
 app.use(express.json());
+app.use(responseTimeLogger);
 
 app.get("/", (req, res) => {
-  res.send("API de Usuarios funcionando 🚀");
+  res.send("API de Giftcards funcionando 🚀");
 });
 
 app.use("/users", userRoutes);
