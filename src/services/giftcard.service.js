@@ -33,7 +33,10 @@ export const crearGift = async (data) => {
 export const getAllGiftcardsByUser = async (userId) => {
   const db = await connectDB();
   const giftcards = await db.all(
-    `SELECT * FROM giftcards WHERE user_id = $user_id`,
+    `SELECT id, name, amount, currency, expiration_date, user_id,
+      expiration_date > CURRENT_DATE AS expired
+    FROM giftcards 
+    WHERE user_id = $user_id`,
     {
       $user_id: userId,
     }
@@ -46,7 +49,9 @@ export const getAllGiftcardsByUser = async (userId) => {
 export const getGiftByIdAndUser = async (id, userId) => {
   const db = await connectDB();
   const giftcard = await db.get(
-    `SELECT * FROM giftcards WHERE id = $id AND user_id = $user_id`,
+    `SELECT id, name, amount, currency, expiration_date, user_id 
+    FROM giftcards 
+    WHERE id = $id AND user_id = $user_id`,
     {
       $id: id,
       $user_id: userId,
@@ -59,9 +64,14 @@ export const getGiftByIdAndUser = async (id, userId) => {
 
 export const getGiftById = async (id) => {
   const db = await connectDB();
-  const giftcard = await db.get(`SELECT * FROM giftcards WHERE id = $id`, {
-    $id: id,
-  });
+  const giftcard = await db.get(
+    `SELECT id, name, amount, currency, expiration_date, user_id 
+    FROM giftcards 
+    WHERE id = $id`,
+    {
+      $id: id,
+    }
+  );
 
   db.close();
   return giftcard;
@@ -80,7 +90,9 @@ export const actualizarGift = async (id, data) => {
   giftcard.expiration_date = data.expiration_date;
 
   await db.run(
-    `UPDATE giftcards SET amount = $amount, expiration_date = $expiration_date WHERE id = $id`,
+    `UPDATE giftcards 
+    SET amount = $amount, expiration_date = $expiration_date 
+    WHERE id = $id`,
     {
       $id: id,
       $amount: data.amount,
