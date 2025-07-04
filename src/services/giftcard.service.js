@@ -34,7 +34,10 @@ export const getAllGiftcardsByUser = async (userId) => {
   const db = await connectDB();
   const giftcards = await db.all(
     `SELECT id, name, amount, currency, expiration_date, user_id,
-      expiration_date > CURRENT_DATE AS expired
+      CASE
+        WHEN expiration_date > CURRENT_DATE THEN true
+        ELSE false
+      END AS expired
     FROM giftcards 
     WHERE user_id = $user_id`,
     {
@@ -42,8 +45,13 @@ export const getAllGiftcardsByUser = async (userId) => {
     }
   );
 
+  const result = giftcards.map((g) => ({
+    ...g,
+    expired: Boolean(g.expired),
+  }));
+
   db.close();
-  return giftcards;
+  return result;
 };
 
 export const getGiftByIdAndUser = async (id, userId) => {
