@@ -68,7 +68,7 @@ export const loginUsuario = async (userData) => {
     throw new Error("Credenciales incorrectas");
   }
 
-  console.log("user", user);
+  // console.log("user", user);
 
   // VERIFICAR CONTRASEÑA
   const isMatch = await bcrypt.compare(password, user.password);

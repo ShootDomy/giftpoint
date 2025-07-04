@@ -4,10 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 export const crearGift = async (data) => {
   const db = await connectDB();
 
-  if (data.amount <= 0) {
-    throw new Error("El monto ingresado debe ser mayor a cero");
-  }
-
+  // Validar fecha de expiración mayor a hoy
   const hoy = new Date();
   if (new Date(data.expiration_date) <= hoy) {
     throw new Error("La fecha de expiración debe ser mayor a la fecha actual");
@@ -96,7 +93,7 @@ export const actualizarGift = async (id, data) => {
   return giftcard;
 };
 
-export const eliminarGift = async (id, userId) => {
+export const eliminarGift = async (id) => {
   const db = await connectDB();
   const giftcard = await getGiftById(id);
 
