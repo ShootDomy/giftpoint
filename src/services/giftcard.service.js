@@ -46,8 +46,8 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
       END AS expired,
       CASE
         WHEN expiration_date BETWEEN date('now') AND date('now', '+7 days') THEN false
-        WHEN expiration_date > CURRENT_DATE THEN false
-        ELSE true
+        WHEN expiration_date > CURRENT_DATE THEN true
+        -- ELSE true
       END AS a_tiempo
     FROM giftcards 
     WHERE user_id = $user_id  ${condicion}`,
