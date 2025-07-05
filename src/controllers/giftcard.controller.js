@@ -58,6 +58,12 @@ export const getGiftcardsByUser = async (req, res) => {
     return res.status(400).json({ error: "user_id debe ser un UUID válido" });
   }
 
+  if (idSource) {
+    if (!isUUID(idSource)) {
+      return res.status(400).json({ error: "user_id debe ser un UUID válido" });
+    }
+  }
+
   try {
     const giftcards = await getAllGiftcardsByUser(req.params.id, idSource);
     res.json(giftcards);

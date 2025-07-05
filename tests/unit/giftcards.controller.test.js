@@ -222,6 +222,7 @@ describe("GiftcardsController", () => {
 
       const mockReq = {
         params: { id: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
+        query: { idSource: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
       };
       const mockRes = {
         json: jest.fn(),
@@ -231,7 +232,8 @@ describe("GiftcardsController", () => {
       await getGiftcardsByUser(mockReq, mockRes);
 
       expect(mockFunctions.getAllGiftcardsByUser).toHaveBeenCalledWith(
-        mockReq.params.id
+        mockReq.params.id,
+        mockReq.query.idSource
       );
       expect(mockRes.json).toHaveBeenCalledWith(mockGiftcards);
     });
@@ -239,6 +241,7 @@ describe("GiftcardsController", () => {
     it("debería validar que el user_id sea un UUID válido", async () => {
       const mockReq = {
         params: { id: "no-es-un-uuid" }, // ID inválido
+        query: { idSource: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
       };
       const mockRes = {
         status: jest.fn().mockReturnThis(),
@@ -258,6 +261,7 @@ describe("GiftcardsController", () => {
 
       const mockReq = {
         params: { id: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
+        query: { idSource: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
       };
       const mockRes = {
         json: jest.fn(),
@@ -277,6 +281,7 @@ describe("GiftcardsController", () => {
 
       const mockReq = {
         params: { id: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
+        query: { idSource: "b4a9e632-869f-4702-bf4c-cdf7562eeb58" },
       };
       const mockRes = {
         status: jest.fn().mockReturnThis(),
