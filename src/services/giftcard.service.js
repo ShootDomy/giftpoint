@@ -43,7 +43,11 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
       CASE
         WHEN expiration_date > CURRENT_DATE THEN true
         ELSE false
-      END AS expired
+      END AS expired,
+      CASE
+        WHEN expiration_date BETWEEN date('now') AND date('now', '+7 days') THEN false
+        ELSE true
+      END AS a_tiempo
     FROM giftcards 
     WHERE user_id = $user_id  ${condicion}`,
     {
@@ -54,6 +58,7 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
   const result = giftcards.map((g) => ({
     ...g,
     expired: Boolean(g.expired),
+    a_tiempo: Boolean(g.a_tiempo),
   }));
 
   db.close();

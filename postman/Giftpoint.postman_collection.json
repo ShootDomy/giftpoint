@@ -1,0 +1,402 @@
+{
+	"info": {
+		"_postman_id": "697268d2-0c97-43a9-9c95-a53a15a166ee",
+		"name": "Giftpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16857415"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "/users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:uuid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/42b272b3-a413-4729-aed1-23a81ddca500",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"42b272b3-a413-4729-aed1-23a81ddca500"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/:uuid",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/1155db0d-10e3-4af7-9a1e-eeb30fe7e249",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"1155db0d-10e3-4af7-9a1e-eeb30fe7e249"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"canizares@example.com\",\r\n    \"password\": \"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"canizaresDomenica@example.com\",\r\n    \"password\": \"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/4c944e1b-a77d-458a-8753-216204fc0032",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"4c944e1b-a77d-458a-8753-216204fc0032"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "1. Registrar usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"domy@example.com\",\r\n    \"password\": \"domy123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/registro",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"registro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Capture token\", function() {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData.token)\r",
+									"    pm.environment.set(\"token\", jsonData.token);\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"domy@example.com\",\r\n    \"password\": \"domy123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "giftcard",
+			"item": [
+				{
+					"name": "1. Crear Giftcard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Card 4111\",\r\n    \"amount\": 100,\r\n    \"currency\": \"USD\",\r\n    \"expiration_date\": \"2026-06-02\",\r\n    \"user_id\": \"63dbba51-17c5-4885-9e94-22adfd0459ab\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/giftcard",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Obtener giftcards por usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/giftcard/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard",
+								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+							],
+							"query": [
+								{
+									"key": "idSource",
+									"value": "1b7b93a9-b07c-4d94-bbf1-7c4768d51d30",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Obtener giftcard por id y usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/giftcard/85a13a0c-33b5-4fee-ad89-c6116509529e/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard",
+								"85a13a0c-33b5-4fee-ad89-c6116509529e",
+								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Actualizar giftcard",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 10.6,\r\n    \"expiration_date\": \"2026-12-02\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/giftcard/85a13a0c-33b5-4fee-ad89-c6116509529e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard",
+								"85a13a0c-33b5-4fee-ad89-c6116509529e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Eliminar giftcard",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 10.50,\r\n    \"currency\": \"USD\",\r\n    \"expiration_date\": \"2025-12-02\",\r\n    \"user_id\": \"d96754e8-dd72-4edc-8569-c3835c625da2\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/giftcard/9d0f55b7-ab73-4b36-bcce-f7739deae78c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard",
+								"9d0f55b7-ab73-4b36-bcce-f7739deae78c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Transferir saldo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sourceCardId\": \"cf92ab03-f8a4-4e2b-b372-5a565cd07955\",\r\n    \"destinationCardId\": \"85a13a0c-33b5-4fee-ad89-c6116509529e\",\r\n    \"amount\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/giftcard/transfer/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"giftcard",
+								"transfer",
+								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prueba Conexion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
