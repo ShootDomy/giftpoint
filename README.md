@@ -156,14 +156,39 @@ giftpoint/
 - `:id` = UUID de la gift card (ej: `550e8400-e29b-41d4-a716-446655440000`)
 - `:userId` = UUID del usuario (ej: `550e8400-e29b-41d4-a716-446655440000`)
 
-### Ejemplo de Uso Completo:
+## 🚀 Ejemplo de uso con Postman
 
+Puedes probar la API fácilmente usando [Postman](https://www.postman.com/).
+
+### Ejemplo: Obtener todas las gift cards de un usuario
+
+**Request:**
 ```http
-GET /api/giftcards
+GET /api/giftcards/b4a9e632-869f-4702-bf4c-cdf7562eeb58?idSource=1b7b93a9-b07c-4d94-bbf1-7c4768d51d30
 Headers:
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer <tu_token_jwt>
   Content-Type: application/json
 ```
+
+**Response:**
+```json
+[
+  {
+    "id": "1b7b93a9-b07c-4d94-bbf1-7c4768d51d30",
+    "name": "Card 1",
+    "amount": 10.5,
+    "currency": "USD",
+    "expiration_date": "2025-12-02",
+    "user_id": "b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+    "expired": false
+  }
+]
+```
+
+### 📥 Importar colección de Postman
+
+Puedes importar la colección de endpoints usando el archivo `postman_collection.json` incluido en este repositorio  
+o [Descargar colección de Postman](./postman/postman_collection.json).
 
 ## 👨‍💻 Información del Autor
 
