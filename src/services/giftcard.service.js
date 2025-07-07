@@ -71,7 +71,8 @@ export const getGiftByIdAndUser = async (id, userId) => {
   const giftcard = await db.get(
     `SELECT id, name, amount, currency, expiration_date, user_id 
     FROM giftcards 
-    WHERE id = $id AND user_id = $user_id`,
+    WHERE id = $id AND user_id = $user_id
+    ORDER BY name ASC`,
     {
       $id: id,
       $user_id: userId,
