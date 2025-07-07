@@ -41,12 +41,12 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
   const giftcards = await db.all(
     `SELECT id, name, amount, currency, strftime('%Y-%m-%d', expiration_date) expiration_date, user_id,
       CASE
-        WHEN expiration_date > CURRENT_DATE THEN false
+        WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN false
         ELSE true
       END AS expired,
       CASE
-        WHEN expiration_date BETWEEN date('now') AND date('now', '+7 days') THEN false
-        WHEN expiration_date > CURRENT_DATE THEN true
+        WHEN strftime('%Y-%m-%d', expiration_date) BETWEEN date('now') AND date('now', '+7 days') THEN false
+        WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN true
         -- ELSE true
       END AS a_tiempo
     FROM giftcards 
