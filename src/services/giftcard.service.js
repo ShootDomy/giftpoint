@@ -39,18 +39,33 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
   }
 
   const giftcards = await db.all(
-    `SELECT id, name, amount, currency, strftime('%Y-%m-%d', expiration_date) expiration_date, user_id,
-      CASE
-        WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN false
-        ELSE true
-      END AS expired,
-      CASE
-        WHEN strftime('%Y-%m-%d', expiration_date) BETWEEN date('now') AND date('now', '+7 days') THEN false
-        WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN true
-        -- ELSE true
-      END AS a_tiempo
-    FROM giftcards 
-    WHERE user_id = $user_id  ${condicion}`,
+    `
+    WITH giftcard AS (
+      SELECT id, name, amount, currency, strftime('%Y-%m-%d', expiration_date) expiration_date, user_id,
+        CASE
+          WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN false
+          ELSE true
+        END AS expired,
+        CASE
+          WHEN strftime('%Y-%m-%d', expiration_date) BETWEEN date('now') AND date('now', '+7 days') THEN false
+          WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN true
+          -- ELSE true
+        END AS a_tiempo
+      FROM giftcards 
+      WHERE user_id = $user_id  ${condicion}
+    ), numero_gift AS (
+      SELECT COUNT(*) AS total FROM giftcard
+    )
+    SELECT id, name, amount, currency, expiration_date, user_id, expired,
+      a_tiempo,
+      CASE 
+        WHEN expired IS TRUE THEN FALSE
+        WHEN num.total > 1 THEN TRUE
+        ELSE FALSE
+      END mostrar
+    FROM giftcard gif
+    CROSS JOIN numero_gift num
+    `,
     {
       $user_id: userId,
     }
@@ -60,6 +75,7 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
     ...g,
     expired: Boolean(g.expired),
     a_tiempo: Boolean(g.a_tiempo),
+    mostrar: Boolean(g.mostrar),
   }));
 
   db.close();
