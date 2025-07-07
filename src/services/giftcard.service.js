@@ -128,10 +128,11 @@ export const actualizarGift = async (id, data) => {
 
   await db.run(
     `UPDATE giftcards 
-    SET amount = $amount, expiration_date = $expiration_date 
+    SET name = $name, amount = $amount, expiration_date = $expiration_date
     WHERE id = $id`,
     {
       $id: id,
+      $name: data.name,
       $amount: data.amount,
       $expiration_date: data.expiration_date,
     }
