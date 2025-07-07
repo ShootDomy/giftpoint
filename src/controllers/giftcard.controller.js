@@ -24,7 +24,9 @@ export const crearGiftcard = async (req, res) => {
   }
 
   // Validar formato de fecha (YYYY-MM-DD)
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(expiration_date)) {
+  const fechaExp = new Date(expiration_date);
+  const formattedDate = fechaExp.toISOString().split("T")[0];
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
     return res.status(400).json({ error: "Formato de fecha inválido" });
   }
 
