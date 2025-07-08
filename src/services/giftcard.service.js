@@ -155,7 +155,7 @@ export const actualizarGift = async (id, data) => {
 
   giftcard.amount = data.amount;
 
-  if (data.expiration_date || data.expiration_date == "null") {
+  if (data.expiration_date || data.expiration_date != "null") {
     giftcard.expiration_date = data.expiration_date;
   }
 
