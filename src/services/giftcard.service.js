@@ -154,7 +154,10 @@ export const actualizarGift = async (id, data) => {
   }
 
   giftcard.amount = data.amount;
-  giftcard.expiration_date = data.expiration_date;
+
+  if (data.expiration_date) {
+    giftcard.expiration_date = data.expiration_date;
+  }
 
   await db.run(
     `UPDATE giftcards 
