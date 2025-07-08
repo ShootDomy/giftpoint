@@ -48,6 +48,10 @@ export const getAllGiftcardsByUser = async (userId, idSource, estado) => {
         condicion1 = ` AND `;
       }
 
+      if (estado == "transferir") {
+        condicion1 += `mostrar = 0 `;
+      }
+
       if (estado == "exirado") {
         condicion1 += `mostrar = 1 `;
       } else if (estado == "por_expirar") {
