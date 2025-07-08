@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
-app.use("/giftcard", giftcardRoutes);
+app.use("/giftcards", giftcardRoutes);
 
 // app.listen(port, () => {
 //   console.log(`Servidor escuchando en http://localhost:${port}`);
