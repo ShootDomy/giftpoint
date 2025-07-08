@@ -30,7 +30,7 @@ export const crearGift = async (data) => {
   return { success: true, giftcard };
 };
 
-export const getAllGiftcardsByUser = async (userId, idSource, estado) => {
+export const getAllGiftcardsByUser = async (userId, idSource, estado, name) => {
   const db = await connectDB();
 
   let condicion = "";
@@ -62,7 +62,15 @@ export const getAllGiftcardsByUser = async (userId, idSource, estado) => {
     }
   }
 
-  console.log("condicion1", condicion1);
+  if (name) {
+    if (condicion1 == "") {
+      condicion1 = ` WHERE `;
+    } else {
+      condicion1 = +` AND `;
+    }
+
+    condicion1 += ` UPPER(name) LIKE UPPER('%${name}%') `;
+  }
 
   const giftcards = await db.all(`
     WITH giftcard AS (

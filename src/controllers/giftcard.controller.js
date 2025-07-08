@@ -52,7 +52,7 @@ export const crearGiftcard = async (req, res) => {
 };
 
 export const getGiftcardsByUser = async (req, res) => {
-  const { idSource, estado } = req.query;
+  const { idSource, estado, name } = req.query;
   // console.log("idSource", idSource);
 
   // Validar UUID
@@ -70,7 +70,8 @@ export const getGiftcardsByUser = async (req, res) => {
     const giftcards = await getAllGiftcardsByUser(
       req.params.id,
       idSource,
-      estado
+      estado,
+      name
     );
     res.json(giftcards);
   } catch (error) {
