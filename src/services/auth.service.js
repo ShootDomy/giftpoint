@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/apiError.js";
 
 const SALT_ROUNDS = 10;
 dotenv.config();
@@ -16,13 +17,29 @@ export const registrarUsuario = async (userData) => {
 
   // const data = readData();
 
+  // Validar formato de email
+  if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    throw new ApiError(400, "Formato de email inválido", {
+      email: userData.email,
+    });
+  }
+
+  // Validar contraseña
+  if (password.length < 6) {
+    throw new ApiError(400, "La contraseña debe tener 6 caracteres o más", {
+      email: userData.password,
+    });
+  }
+
   // VALIDAR SI EL EMAIL EXISTE
-  const existeEmail = await db.get("SELECT * FROM users WHERE email = ?", [
-    email,
-  ]);
+  const existeEmail = await db.get(
+    `SELECT * FROM users WHERE email = '${email}'`
+  );
 
   if (existeEmail) {
-    throw new Error("El correo ingresado ya existe");
+    throw new ApiError(400, "El correo ya está registrado", {
+      email: userData.email,
+    });
   }
 
   // ECRIPTAR CONTRASEÑA
@@ -50,7 +67,9 @@ export const registrarUsuario = async (userData) => {
     }
   );
 
-  return { success: true, user };
+  delete user.password;
+
+  return user;
 };
 
 export const loginUsuario = async (userData) => {
@@ -65,7 +84,7 @@ export const loginUsuario = async (userData) => {
   // VERIFICAR SI EL EMAIL EXISTE
   const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
   if (!user) {
-    throw new Error("Credenciales incorrectas");
+    throw new ApiError(400, "Credenciales incorrectas", {});
   }
 
   // console.log("user", user);
@@ -73,13 +92,17 @@ export const loginUsuario = async (userData) => {
   // VERIFICAR CONTRASEÑA
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error("Credenciales incorrectas");
+    throw new ApiError(400, "Credenciales incorrectas", {});
   }
 
   // GENERAR TOKEN JWT
-  const token = jwt.sign({ uuid: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign(
+    { uuid: user.id, name: user.name, email: user.email },
+    JWT_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
 
-  return { uuid: user.id, token };
+  return { uuid: user.id, name: user.name, token };
 };
