@@ -66,7 +66,7 @@ export const getAllGiftcardsByUser = async (
   }
 
   if (!items) {
-    items = 4;
+    items = 99999;
   }
 
   const offset = (paginaActual - 1) * items;
