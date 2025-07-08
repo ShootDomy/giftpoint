@@ -35,8 +35,8 @@ export const getAllGiftcardsByUser = async (
   idSource,
   estado,
   name,
-  paginaActual,
-  items
+  page,
+  size
 ) => {
   const db = await connectDB();
 
@@ -61,15 +61,15 @@ export const getAllGiftcardsByUser = async (
 
   condicion1 = filtros.length > 0 ? `WHERE ${filtros.join(" AND ")}` : "";
 
-  if (!paginaActual) {
-    paginaActual = 1;
+  if (!page) {
+    page = 1;
   }
 
-  if (!items) {
-    items = 99999;
+  if (!size) {
+    size = 99999;
   }
 
-  const offset = (paginaActual - 1) * items;
+  const offset = (page - 1) * size;
 
   const giftcards = await db.all(`
     WITH giftcard AS (
@@ -110,13 +110,13 @@ export const getAllGiftcardsByUser = async (
     paginados AS (
       SELECT * FROM datos
       ORDER BY name ASC
-      LIMIT ${items} OFFSET ${offset}
+      LIMIT ${size} OFFSET ${offset}
     )
     SELECT 
       *,
-      ${paginaActual} AS pagina_actual,
+      ${page} AS pagina_actual,
       CASE 
-        WHEN (${paginaActual} * ${items}) < registros THEN (${paginaActual} + 1)
+        WHEN (${page} * ${size}) < registros THEN (${page} + 1)
         ELSE NULL
       END AS siguiente_pagina
     FROM paginados;
@@ -145,13 +145,13 @@ export const getAllGiftcardsByUser = async (
     })),
     pagination: giftcards[0]
       ? {
-          registros: giftcards[0].registros,
-          pagina_actual: giftcards[0].pagina_actual,
+          size: giftcards[0].registros,
+          page: giftcards[0].pagina_actual,
           siguiente_pagina: giftcards[0].siguiente_pagina,
         }
       : {
           registros: 0,
-          pagina_actual: paginaActual,
+          page: page,
           siguiente_pagina: null,
         },
   };
