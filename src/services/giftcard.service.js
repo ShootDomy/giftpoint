@@ -7,7 +7,7 @@ export const crearGift = async (data) => {
   // Validar fecha de expiración mayor a hoy
   const hoy = new Date();
   if (new Date(data.expiration_date) <= hoy) {
-    throw new Error("La fecha de expiración debe ser mayor a la fecha actual");
+    // throw new Error("La fecha de expiración debe ser mayor a la fecha actual");
   }
 
   const giftcard = { uuid: uuidv4(), ...data };
@@ -30,16 +30,37 @@ export const crearGift = async (data) => {
   return { success: true, giftcard };
 };
 
-export const getAllGiftcardsByUser = async (userId, idSource) => {
+export const getAllGiftcardsByUser = async (userId, idSource, estado) => {
   const db = await connectDB();
 
   let condicion = "";
+  let condicion1 = "";
+
   if (idSource) {
     condicion = ` AND id <> '${idSource}' `;
   }
 
-  const giftcards = await db.all(
-    `
+  if (estado) {
+    if (estado != "todo") {
+      if (condicion1 == "") {
+        condicion1 = ` WHERE `;
+      } else {
+        condicion1 = ` AND `;
+      }
+
+      if (estado == "exirado") {
+        condicion1 += `mostrar = 1 `;
+      } else if (estado == "por_expirar") {
+        condicion1 += `a_tiempo = 0 `;
+      } else if (estado == "a_tiempo") {
+        condicion1 += `mostrar = 0 `;
+      }
+    }
+  }
+
+  console.log("condicion1", condicion1);
+
+  const giftcards = await db.all(`
     WITH giftcard AS (
       SELECT id, name, amount, currency, strftime('%Y-%m-%d', expiration_date) expiration_date, user_id,
         CASE
@@ -52,7 +73,7 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
           -- ELSE true
         END AS a_tiempo
       FROM giftcards 
-      WHERE user_id = $user_id  ${condicion}
+      WHERE user_id = '${userId}' ${condicion}
     ), numero_gift AS (
       SELECT COUNT(*) AS total FROM giftcard
     )
@@ -65,11 +86,8 @@ export const getAllGiftcardsByUser = async (userId, idSource) => {
       END mostrar
     FROM giftcard gif
     CROSS JOIN numero_gift num
-    `,
-    {
-      $user_id: userId,
-    }
-  );
+    ${condicion1}
+  `);
 
   const result = giftcards.map((g) => ({
     ...g,
