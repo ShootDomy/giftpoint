@@ -30,85 +30,132 @@ export const crearGift = async (data) => {
   return { success: true, giftcard };
 };
 
-export const getAllGiftcardsByUser = async (userId, idSource, estado, name) => {
+export const getAllGiftcardsByUser = async (
+  userId,
+  idSource,
+  estado,
+  name,
+  paginaActual,
+  items
+) => {
   const db = await connectDB();
 
   let condicion = "";
   let condicion1 = "";
+  let filtros = [];
 
   if (idSource) {
     condicion = ` AND id <> '${idSource}' `;
   }
 
-  if (estado) {
-    if (estado != "todo") {
-      if (condicion1 == "") {
-        condicion1 = ` WHERE `;
-      } else {
-        condicion1 = ` AND `;
-      }
-
-      if (estado == "transferir") {
-        condicion1 += `mostrar = 1 `;
-      }
-
-      if (estado == "expirado") {
-        condicion1 += `mostrar = 0 `;
-      } else if (estado == "por_expirar") {
-        condicion1 += `a_tiempo = 0 `;
-      } else if (estado == "a_tiempo") {
-        condicion1 += `mostrar = 1 `;
-      }
-    }
+  if (estado && estado !== "todo") {
+    if (estado === "transferir") filtros.push(`mostrar = 1`);
+    else if (estado === "expirado") filtros.push(`mostrar = 0`);
+    else if (estado === "por_expirar") filtros.push(`a_tiempo = 0`);
+    else if (estado === "a_tiempo") filtros.push(`mostrar = 1`);
   }
 
   if (name) {
-    if (condicion1 == "") {
-      condicion1 = ` WHERE `;
-    } else {
-      condicion1 = +` AND `;
-    }
-
-    condicion1 += ` UPPER(name) LIKE UPPER('%${name}%') `;
+    filtros.push(`UPPER(name) LIKE UPPER('%${name}%')`);
   }
+
+  condicion1 = filtros.length > 0 ? `WHERE ${filtros.join(" AND ")}` : "";
+
+  if (!paginaActual) {
+    paginaActual = 1;
+  }
+
+  if (!items) {
+    items = 4;
+  }
+
+  const offset = (paginaActual - 1) * items;
 
   const giftcards = await db.all(`
     WITH giftcard AS (
-      SELECT id, name, amount, currency, strftime('%Y-%m-%d', expiration_date) expiration_date, user_id,
+      SELECT 
+        id, name, amount, currency,
+        strftime('%Y-%m-%d', expiration_date) AS expiration_date,
+        user_id,
         CASE
-          WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN false
-          ELSE true
+          WHEN strftime('%Y-%m-%d', expiration_date) > date('now') THEN 0
+          ELSE 1
         END AS expired,
         CASE
-          WHEN strftime('%Y-%m-%d', expiration_date) BETWEEN date('now') AND date('now', '+7 days') THEN false
-          WHEN strftime('%Y-%m-%d', expiration_date) > CURRENT_DATE THEN true
-          -- ELSE true
+          WHEN strftime('%Y-%m-%d', expiration_date) BETWEEN date('now') AND date('now', '+7 days') THEN 0
+          WHEN strftime('%Y-%m-%d', expiration_date) > date('now') THEN 1
+          ELSE 0
         END AS a_tiempo
-      FROM giftcards 
+      FROM giftcards
       WHERE user_id = '${userId}' ${condicion}
-    ), numero_gift AS (
+    ),
+    numero_gift AS (
       SELECT COUNT(*) AS total FROM giftcard
+    ),
+    datos AS (
+      SELECT 
+        gif.id, gif.name, gif.amount, gif.currency,
+        gif.expiration_date, gif.user_id,
+        gif.expired, gif.a_tiempo,
+        CASE 
+          WHEN gif.expired = 1 THEN 0
+          WHEN num.total > 1 THEN 1
+          ELSE 0
+        END AS mostrar,
+        num.total AS registros
+      FROM giftcard gif
+      CROSS JOIN numero_gift num
+      ${condicion1}
+    ),
+    paginados AS (
+      SELECT * FROM datos
+      ORDER BY name ASC
+      LIMIT ${items} OFFSET ${offset}
     )
-    SELECT id, name, amount, currency, expiration_date, user_id, expired,
-      a_tiempo,
+    SELECT 
+      *,
+      ${paginaActual} AS pagina_actual,
       CASE 
-        WHEN expired IS TRUE THEN FALSE
-        WHEN num.total > 1 THEN TRUE
-        ELSE FALSE
-      END mostrar
-    FROM giftcard gif
-    CROSS JOIN numero_gift num
-    ${condicion1}
+        WHEN (${paginaActual} * ${items}) < registros THEN (${paginaActual} + 1)
+        ELSE NULL
+      END AS siguiente_pagina
+    FROM paginados;
   `);
 
-  const result = giftcards.map((g) => ({
-    ...g,
-    expired: Boolean(g.expired),
-    a_tiempo: Boolean(g.a_tiempo),
-    mostrar: Boolean(g.mostrar),
-  }));
+  // const result = giftcards.map((g) => ({
+  //   ...g,
+  //   expired: Boolean(g.expired),
+  //   a_tiempo: Boolean(g.a_tiempo),
+  //   mostrar: Boolean(g.mostrar),
+  // }));
 
   db.close();
+
+  const result = {
+    data: giftcards.map((g) => ({
+      id: g.id,
+      name: g.name,
+      amount: g.amount,
+      currency: g.currency,
+      expiration_date: g.expiration_date,
+      user_id: g.user_id,
+      expired: Boolean(g.expired),
+      a_tiempo: Boolean(g.a_tiempo),
+      mostrar: Boolean(g.mostrar),
+    })),
+    pagination: giftcards[0]
+      ? {
+          registros: giftcards[0].registros,
+          pagina_actual: giftcards[0].pagina_actual,
+          siguiente_pagina: giftcards[0].siguiente_pagina,
+        }
+      : {
+          registros: 0,
+          pagina_actual: paginaActual,
+          siguiente_pagina: null,
+        },
+  };
+
   return result;
 };
 
