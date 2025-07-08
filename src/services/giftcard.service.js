@@ -49,15 +49,15 @@ export const getAllGiftcardsByUser = async (userId, idSource, estado) => {
       }
 
       if (estado == "transferir") {
-        condicion1 += `mostrar = 0 `;
+        condicion1 += `mostrar = 1 `;
       }
 
-      if (estado == "exirado") {
-        condicion1 += `mostrar = 1 `;
+      if (estado == "expirado") {
+        condicion1 += `mostrar = 0 `;
       } else if (estado == "por_expirar") {
         condicion1 += `a_tiempo = 0 `;
       } else if (estado == "a_tiempo") {
-        condicion1 += `mostrar = 0 `;
+        condicion1 += `mostrar = 1 `;
       }
     }
   }
