@@ -315,3 +315,18 @@ export const transferirAmountGift = async (userId, data) => {
     data: [giftSalida, giftDestino],
   };
 };
+
+export const eliminarGiftUserId = async (userId) => {
+  const db = await connectDB();
+
+  await db.run(`DELETE FROM giftcards WHERE user_id = $id`, {
+    $user_id: userId,
+  });
+
+  db.close();
+
+  return {
+    success: true,
+    message: "Giftcards eliminadas exitosamente",
+  };
+};
