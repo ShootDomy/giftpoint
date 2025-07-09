@@ -53,7 +53,7 @@ export const getAllGiftcardsByUser = async (
     condicion = ` UPPER(name) LIKE UPPER('%${name}%') `;
   }
 
-  if (moneda) {
+  if (moneda && moneda !== "todo") {
     condicion = ` AND currency = '${moneda}' `;
   }
 
