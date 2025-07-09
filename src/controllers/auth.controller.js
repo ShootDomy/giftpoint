@@ -2,7 +2,9 @@ import { loginUsuario, registrarUsuario } from "../services/auth.service.js";
 
 export const registrar = async (req, res, next) => {
   if (!req.body.email || !req.body.password) {
-    return res.status(400).json({ error: "Faltan campos requeridos" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Faltan campos requeridos" }, {});
   }
 
   try {

@@ -1,5 +1,6 @@
 import { connectDB } from "../db/database.js";
 import { v4 as uuidv4 } from "uuid";
+import { ApiError } from "../utils/apiError.js";
 
 export const crearGift = async (data) => {
   const db = await connectDB();
@@ -7,7 +8,13 @@ export const crearGift = async (data) => {
   // Validar fecha de expiración mayor a hoy
   const hoy = new Date();
   if (new Date(data.expiration_date) <= hoy) {
-    // throw new Error("La fecha de expiración debe ser mayor a la fecha actual");
+    throw new ApiError(
+      400,
+      "La fecha de expiración debe ser mayor a la fecha actual",
+      {
+        email: data.expiration_date,
+      }
+    );
   }
 
   const giftcard = { uuid: uuidv4(), ...data };
@@ -27,7 +34,7 @@ export const crearGift = async (data) => {
 
   db.close();
 
-  return { success: true, giftcard };
+  return { giftcard };
 };
 
 export const getAllGiftcardsByUser = async (
@@ -202,9 +209,12 @@ export const actualizarGift = async (id, data) => {
   const giftcard = await getGiftById(id);
 
   if (!giftcard) {
-    throw new Error("NO SE HA ENCONTRADO GIFTCARD");
+    throw new ApiError(400, "No se ha encontrado la Giftcard", {
+      id: id,
+    });
   }
 
+  giftcard.name = data.name;
   giftcard.amount = data.amount;
 
   if (data.expiration_date || data.expiration_date != "null") {
@@ -233,7 +243,9 @@ export const eliminarGift = async (id) => {
   const giftcard = await getGiftById(id);
 
   if (!giftcard) {
-    throw new Error("NO SE HA ENCONTRADO GIFTCARD");
+    throw new ApiError(400, "No se ha encontrado la Giftcard", {
+      id: id,
+    });
   }
 
   await db.run(`DELETE FROM giftcards WHERE id = $id`, {
@@ -244,6 +256,7 @@ export const eliminarGift = async (id) => {
 
   return {
     success: true,
+    message: "Giftcard eliminada exitosamente",
   };
 };
 
@@ -254,26 +267,35 @@ export const transferirAmountGift = async (userId, data) => {
   const giftSalida = await getGiftByIdAndUser(data.sourceCardId, userId);
 
   if (!giftSalida) {
-    throw new Error("NO SE HA ENCONTRADO GIFTCARD SALIDA");
+    throw new ApiError(400, "No se ha encontrado la giftcard de salida", {
+      id: data.sourceCardId,
+    });
   }
 
   const giftDestino = await getGiftByIdAndUser(data.destinationCardId, userId);
 
   if (!giftDestino) {
-    throw new Error("NO SE HA ENCONTRADO GIFTCARD DE DESTINO");
+    throw new ApiError(400, "No se ha encontrado la giftcard de destino", {
+      id: data.destinationCardId,
+    });
   }
 
   // VALIDACION DE SALDO GIFT SALIDA
   if (giftSalida.amount < data.amount) {
-    throw new Error("LA GIFTCARD NO TIENE SALDO SUFICIENTE");
+    throw new ApiError(400, "La Giftcard no tiene saldo suficiente", {
+      id: data.sourceCardId,
+    });
   }
 
   // VALIDACION DE SALDO POSITIVO
   if (data.amount <= 0) {
-    throw new Error("EL MONTO DEBE SER MAYOR A CERO");
+    throw new ApiError(400, "El monto debe ser mayor a cero", {
+      id: data.sourceCardId,
+    });
   }
 
   giftSalida.amount = giftSalida.amount - data.amount;
+
   await db.run(`UPDATE giftcards SET amount = $amount WHERE id = $id`, {
     $id: data.sourceCardId,
     $amount: giftSalida.amount,
@@ -289,6 +311,7 @@ export const transferirAmountGift = async (userId, data) => {
 
   return {
     success: true,
-    giftcards: [giftSalida, giftDestino],
+    message: "Transferencia realizada exitosamente",
+    data: [giftSalida, giftDestino],
   };
 };
