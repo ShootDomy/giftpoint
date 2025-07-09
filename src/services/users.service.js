@@ -58,11 +58,21 @@ export const updateUser = async (id, body) => {
   user.email = body.email;
   // user.password = body.password;
 
-  await db.run(`UPDATE users SET name = $name, email = $email WHERE id = $id`, {
-    $id: id,
-    $name: user.name,
-    $email: user.email,
-  });
+  let actualizarContra = "";
+  if (body.password && body.password !== "") {
+    user.password = body.password;
+    actualizarContra = ` , password = $password `;
+  }
+
+  await db.run(
+    `UPDATE users SET name = $name, email = $email ${actualizarContra} WHERE id = $id`,
+    {
+      $id: id,
+      $name: user.name,
+      $email: user.email,
+      $password: user.password,
+    }
+  );
 
   db.close();
 
