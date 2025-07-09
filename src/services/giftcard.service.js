@@ -68,7 +68,7 @@ export const getAllGiftcardsByUser = async (
     if (estado === "transferir") filtros.push(`mostrar = 1`);
     if (estado === "expirado") filtros.push(`mostrar = 0`);
     if (estado === "por_expirar") filtros.push(`a_tiempo = 0 AND expired = 0`);
-    if (estado === "a_tiempo") filtros.push(`mostrar = 1`);
+    if (estado === "a_tiempo") filtros.push(`a_tiempo = 1`);
   }
 
   condicion1 = filtros.length > 0 ? `WHERE ${filtros.join(" AND ")}` : "";
