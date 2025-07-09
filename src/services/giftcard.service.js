@@ -57,11 +57,11 @@ export const getAllGiftcardsByUser = async (
   }
 
   if (name) {
-    condicion = ` UPPER(name) LIKE UPPER('%${name}%') `;
+    condicion += ` AND UPPER(name) LIKE UPPER('%${name}%') `;
   }
 
   if (moneda && moneda !== "todo") {
-    condicion = ` AND currency = '${moneda}' `;
+    condicion += ` AND currency = '${moneda}' `;
   }
 
   if (estado && estado !== "todo") {
