@@ -60,6 +60,12 @@ export const updateUser = async (id, body) => {
 
   let actualizarContra = "";
   if (body.password && body.password !== "") {
+    if (body.password.length < 6) {
+      throw new ApiError(400, "La contraseña debe tener 6 caracteres o más", {
+        email: body.password,
+      });
+    }
+
     user.password = body.password;
     actualizarContra = ` , password = $password `;
   }
