@@ -35,6 +35,7 @@ export const getAllGiftcardsByUser = async (
   idSource,
   estado,
   name,
+  moneda,
   page,
   size
 ) => {
@@ -48,15 +49,19 @@ export const getAllGiftcardsByUser = async (
     condicion = ` AND id <> '${idSource}' `;
   }
 
-  if (estado && estado !== "todo") {
-    if (estado === "transferir") filtros.push(`mostrar = 1`);
-    else if (estado === "expirado") filtros.push(`mostrar = 0`);
-    else if (estado === "por_expirar") filtros.push(`a_tiempo = 0`);
-    else if (estado === "a_tiempo") filtros.push(`mostrar = 1`);
+  if (name) {
+    condicion = ` UPPER(name) LIKE UPPER('%${name}%') `;
   }
 
-  if (name) {
-    filtros.push(`UPPER(name) LIKE UPPER('%${name}%')`);
+  if (moneda) {
+    condicion = ` AND currency = '${moneda}' `;
+  }
+
+  if (estado && estado !== "todo") {
+    if (estado === "transferir") filtros.push(`mostrar = 1`);
+    if (estado === "expirado") filtros.push(`mostrar = 0`);
+    if (estado === "por_expirar") filtros.push(`a_tiempo = 0`);
+    if (estado === "a_tiempo") filtros.push(`mostrar = 1`);
   }
 
   condicion1 = filtros.length > 0 ? `WHERE ${filtros.join(" AND ")}` : "";
