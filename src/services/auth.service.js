@@ -100,7 +100,7 @@ export const loginUsuario = async (userData) => {
     { uuid: user.id, name: user.name, email: user.email },
     JWT_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "30d",
     }
   );
 
