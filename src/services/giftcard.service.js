@@ -169,8 +169,8 @@ export const getAllGiftcardsByUser = async (
         }
       : {
           registros: 0,
-          page: page,
-          siguiente_pagina: null,
+          page: Number(page),
+          siguiente_pagina: 0,
         },
   };
 
