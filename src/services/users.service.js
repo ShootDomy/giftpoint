@@ -62,7 +62,7 @@ export const updateUser = async (id, body) => {
   // user.password = body.password;
 
   let actualizarContra = "";
-  if (body.password && body.password !== "") {
+  if (body.password && body.password !== "" && body.password !== "null") {
     if (body.password.length < 6) {
       throw new ApiError(400, "La contraseña debe tener 6 caracteres o más", {
         email: body.password,
@@ -90,6 +90,8 @@ export const updateUser = async (id, body) => {
   );
 
   db.close();
+
+  delete user.password;
 
   // writeData(data);
   return user;
