@@ -223,12 +223,33 @@ export const actualizarGift = async (id, data) => {
   giftcard.name = data.name;
   giftcard.amount = data.amount;
 
-  if (data.expiration_date || data.expiration_date != "null") {
+  if (data.expiration_date && data.expiration_date != "null") {
+    // Validar formato de fecha (YYYY-MM-DD)
+    const fechaExp = new Date(data.expiration_date);
+    const formattedDate = fechaExp.toISOString().split("T")[0];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
+      throw new ApiError(400, "Formato de fecha inválido", {
+        expiration_date: data.expiration_date,
+      });
+    }
+
+    // Validar fecha de expiración mayor a hoy
+    const hoy = new Date();
+    if (new Date(data.expiration_date) <= hoy) {
+      throw new ApiError(
+        400,
+        "La fecha de expiración debe ser mayor a la fecha actual",
+        {
+          email: data.expiration_date,
+        }
+      );
+    }
+
     giftcard.expiration_date = data.expiration_date;
   }
 
   await db.run(
-    `UPDATE giftcards 
+    `UPDATE giftcards
     SET name = $name, amount = $amount, expiration_date = $expiration_date
     WHERE id = $id`,
     {
