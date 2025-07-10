@@ -57,7 +57,7 @@ export const getAllGiftcardsByUser = async (
   }
 
   if (name) {
-    condicion += ` AND UPPER(name) LIKE UPPER('%${name}%') `;
+    condicion += ` AND TRIM(UPPER(name)) LIKE TRIM(UPPER('%${name}%')) `;
   }
 
   if (moneda && moneda !== "todo") {
@@ -137,7 +137,8 @@ export const getAllGiftcardsByUser = async (
         WHEN (${page} * ${size}) < registros THEN (${page} + 1)
         ELSE 0
       END AS siguiente_pagina
-    FROM paginados;
+    FROM paginados
+    ORDER BY TRIM(UPPER(name)) ASC
   `);
 
   // const result = giftcards.map((g) => ({
