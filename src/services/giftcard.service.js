@@ -71,7 +71,7 @@ export const getAllGiftcardsByUser = async (
     // if (estado === "a_tiempo") filtros.push(`a_tiempo = 1`);
 
     if (estado === "transferir")
-      filtros.push(`a_tiempo = 1 AND gif.currency = '${moneda}'`);
+      filtros.push(`mostrar = 1 AND gif.currency = '${moneda}'`);
     if (estado === "expirado") filtros.push(`gif.expired = 1`);
     if (estado === "por_expirar")
       filtros.push(`a_tiempo = 0 AND gif.expired = 0`);
