@@ -1,11 +1,14 @@
 import { readData, writeData } from "../config/db.js";
 import { v4 as uuidv4 } from "uuid";
 import { connectDB } from "../db/database.js";
+import bcrypt from "bcrypt";
 import { ApiError } from "../utils/apiError.js";
 import {
   eliminarGiftUserId,
   getAllGiftcardsByUser,
 } from "./giftcard.service.js";
+
+const SALT_ROUNDS = 10;
 
 export const getAllUsers = async () => {
   // const data = readData();
@@ -66,9 +69,15 @@ export const updateUser = async (id, body) => {
       });
     }
 
-    user.password = body.password;
+    // ECRIPTAR CONTRASEÑA
+    const hashedContra = await bcrypt.hash(body.password, SALT_ROUNDS);
+
+    user.password = hashedContra;
     actualizarContra = ` , password = $password `;
   }
+
+  // console.log("body", body);
+  // console.log("user", user);
 
   await db.run(
     `UPDATE users SET name = $name, email = $email ${actualizarContra} WHERE id = $id`,
