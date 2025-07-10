@@ -48,7 +48,7 @@ export const registrarUsuario = async (userData) => {
   // CREAR USUARIO
   const user = {
     uuid: uuidv4(),
-    nombre: name,
+    name: name,
     email: email,
     password: hashedContra,
   };
