@@ -107,33 +107,32 @@ export const getAllGiftcardsByUser = async (
         END AS a_tiempo
       FROM giftcards
       WHERE user_id = '${userId}' ${condicion}
-    ),
-    numero_gift AS (
-      SELECT COUNT(*) AS total FROM giftcard
-    ),
-    datos AS (
+    ), num_moneda AS (
+      SELECT COUNT(*) total, currency FROM giftcard GROUP BY currency
+    ), datos AS (
       SELECT 
         gif.id, gif.name, gif.amount, gif.currency,
         gif.expiration_date, gif.user_id,
         gif.expired, gif.a_tiempo,
         CASE 
           WHEN gif.expired = 1 THEN 0
-          WHEN num.total > 1 THEN 1
+          WHEN mon.total <= 1 THEN 0
+          WHEN mon.total > 1 THEN 1
           ELSE 0
-        END AS mostrar,
-        num.total AS registros
+        END AS mostrar
       FROM giftcard gif
-      CROSS JOIN numero_gift num
+      LEFT JOIN num_moneda mon ON mon.currency = gif.currency
       ${condicion1}
-    ),
-    paginados AS (
-      SELECT * FROM datos
+    ), numero_gift AS (
+      SELECT COUNT(*) AS total FROM datos
+    ), paginados AS (
+      SELECT dat.*, num.total AS registros
+      FROM datos dat
+      CROSS JOIN numero_gift num
       ORDER BY name ASC
       LIMIT ${size} OFFSET ${offset}
     )
-    SELECT 
-      *,
-      ${page} AS pagina_actual,
+    SELECT *, ${page} AS pagina_actual,
       CASE 
         WHEN (${page} * ${size}) < registros THEN (${page} + 1)
         ELSE NULL
