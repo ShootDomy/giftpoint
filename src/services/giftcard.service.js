@@ -135,7 +135,7 @@ export const getAllGiftcardsByUser = async (
     SELECT *, ${page} AS pagina_actual,
       CASE 
         WHEN (${page} * ${size}) < registros THEN (${page} + 1)
-        ELSE NULL
+        ELSE 0
       END AS siguiente_pagina
     FROM paginados;
   `);
