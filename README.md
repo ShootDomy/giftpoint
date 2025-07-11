@@ -59,7 +59,7 @@ PORT=3000
 DB_PATH=./src/db/db.sqlite
 ```
 
-## � Uso Básico
+## 📘 Uso Básico
 
 Modo desarrollo (con nodemon):
 
@@ -76,12 +76,16 @@ npm start
 
 ```
 
-🧪 Pruebas
+## 🧪 Pruebas con Jest
+
+Este proyecto utiliza Jest para pruebas unitarias y de integración.
 
 ```bash
 npm test
 
 ```
+
+<img width="894" height="275" alt="Image" src="https://github.com/user-attachments/assets/36be44b7-7c02-492c-a0df-6fa4d2f2605e" />
 
 ## 📂 Estructura del proyecto
 
