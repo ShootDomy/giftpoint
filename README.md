@@ -49,13 +49,6 @@ npm install
 
 ```
 
-3. (Opcional) Crea un archivo .env y configura tus variables de entorno:
-
-```bash
-JWT_SECRET=yourSecretKey
-PORT=3000
-```
-
 ## ⚙️ Configuración
 
 Archivo .env:
@@ -195,7 +188,7 @@ o [Descargar colección de Postman](./postman/Giftpoint_Dev.postman_collection.j
 Este proyecto de backend está desplegado en Railway, una plataforma moderna para desplegar aplicaciones Node.js con facilidad.
 
 🔗 Enlace de producción:
-[https://tu-proyecto.railway.app](https://giftpoint-production.up.railway.app)
+[https://giftpoint-production.up.railway.app](https://giftpoint-production.up.railway.app)
 
 
 ## 👨‍💻 Información del Autor
