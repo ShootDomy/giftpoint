@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "697268d2-0c97-43a9-9c95-a53a15a166ee",
-		"name": "Giftpoint",
+		"_postman_id": "1236b9e3-aed5-419c-bbf5-dd5fe62610ca",
+		"name": "Giftpoint Dev",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "16857415"
 	},
@@ -9,6 +9,75 @@
 		{
 			"name": "users",
 			"item": [
+				{
+					"name": "1. Obtener info usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Actualizar usuario",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"canizares@example.com\",\r\n    \"password\": \"admin123\",\r\n    \"name\": \"Domenica C\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Eliminar usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "/users",
 					"request": {
@@ -21,101 +90,6 @@
 							],
 							"path": [
 								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/:uuid",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/users/42b272b3-a413-4729-aed1-23a81ddca500",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"42b272b3-a413-4729-aed1-23a81ddca500"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users/:uuid",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/users/1155db0d-10e3-4af7-9a1e-eeb30fe7e249",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"users",
-								"1155db0d-10e3-4af7-9a1e-eeb30fe7e249"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"canizares@example.com\",\r\n    \"password\": \"admin123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/users",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "/users",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"canizaresDomenica@example.com\",\r\n    \"password\": \"admin123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/users/4c944e1b-a77d-458a-8753-216204fc0032",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"users",
-								"4c944e1b-a77d-458a-8753-216204fc0032"
 							]
 						}
 					},
@@ -133,7 +107,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"domy@example.com\",\r\n    \"password\": \"domy123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"canizares@example.com\",\r\n    \"password\": \"admin123\",\r\n    \"name\": \"Domenica\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -141,10 +115,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/registro",
+							"raw": "http://localhost:3000/auth/registro",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
 								"auth",
 								"registro"
@@ -160,11 +136,11 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Capture token\", function() {\r",
+									"/*pm.test(\"Capture token\", function() {\r",
 									"    var jsonData = pm.response.json();\r",
 									"    console.log(jsonData.token)\r",
-									"    pm.environment.set(\"token\", jsonData.token);\r",
-									"})"
+									"    pm.environment.set(\"token\", jsonData.data.token);\r",
+									"})*/"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -176,7 +152,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"domy@example.com\",\r\n    \"password\": \"domy123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"canizares@example.com\",\r\n    \"password\": \"admin123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -184,15 +160,25 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/auth/login",
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
 								"auth",
 								"login"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -208,7 +194,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Card 4111\",\r\n    \"amount\": 100,\r\n    \"currency\": \"USD\",\r\n    \"expiration_date\": \"2026-06-02\",\r\n    \"user_id\": \"63dbba51-17c5-4885-9e94-22adfd0459ab\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Card prueba EUR\",\r\n    \"amount\": 12,\r\n    \"currency\": \"EUR\",\r\n    \"expiration_date\": \"2025-07-13\",\r\n    \"user_id\": \"b4a9e632-869f-4702-bf4c-cdf7562eeb58\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -216,12 +202,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/giftcard",
+							"raw": "http://localhost:3000/giftcards",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard"
+								"giftcards"
 							]
 						}
 					},
@@ -233,19 +221,40 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/giftcard/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"raw": "http://localhost:3000/giftcards/b4a9e632-869f-4702-bf4c-cdf7562eeb58?idSource=&estado=todo&name=&page=1&size=12&moneda=todo",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard",
-								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+								"giftcards",
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
 							],
 							"query": [
 								{
 									"key": "idSource",
-									"value": "1b7b93a9-b07c-4d94-bbf1-7c4768d51d30",
-									"disabled": true
+									"value": ""
+								},
+								{
+									"key": "estado",
+									"value": "todo"
+								},
+								{
+									"key": "name",
+									"value": ""
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "12"
+								},
+								{
+									"key": "moneda",
+									"value": "todo"
 								}
 							]
 						}
@@ -258,14 +267,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/giftcard/85a13a0c-33b5-4fee-ad89-c6116509529e/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"raw": "http://localhost:3000/giftcards/c8ae0a63-a069-4582-a1a1-444fbb752e08/b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard",
-								"85a13a0c-33b5-4fee-ad89-c6116509529e",
-								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+								"giftcards",
+								"c8ae0a63-a069-4582-a1a1-444fbb752e08",
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
 							]
 						}
 					},
@@ -278,7 +289,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"amount\": 10.6,\r\n    \"expiration_date\": \"2026-12-02\"\r\n}",
+							"raw": "{\r\n     \"name\": \"Card prueba EUR\",\r\n    \"amount\": 12,\r\n    \"expiration_date\": \"2025-07-18\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -286,13 +297,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/giftcard/85a13a0c-33b5-4fee-ad89-c6116509529e",
+							"raw": "http://localhost:3000/giftcards/c8ae0a63-a069-4582-a1a1-444fbb752e08",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard",
-								"85a13a0c-33b5-4fee-ad89-c6116509529e"
+								"giftcards",
+								"c8ae0a63-a069-4582-a1a1-444fbb752e08"
 							]
 						}
 					},
@@ -303,18 +316,16 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"amount\": 10.50,\r\n    \"currency\": \"USD\",\r\n    \"expiration_date\": \"2025-12-02\",\r\n    \"user_id\": \"d96754e8-dd72-4edc-8569-c3835c625da2\"\r\n}"
-						},
 						"url": {
-							"raw": "{{url}}/giftcard/9d0f55b7-ab73-4b36-bcce-f7739deae78c",
+							"raw": "http://localhost:3000/giftcards/c8ae0a63-a069-4582-a1a1-444fbb752e08",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard",
-								"9d0f55b7-ab73-4b36-bcce-f7739deae78c"
+								"giftcards",
+								"c8ae0a63-a069-4582-a1a1-444fbb752e08"
 							]
 						}
 					},
@@ -327,7 +338,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sourceCardId\": \"cf92ab03-f8a4-4e2b-b372-5a565cd07955\",\r\n    \"destinationCardId\": \"85a13a0c-33b5-4fee-ad89-c6116509529e\",\r\n    \"amount\": 10\r\n}",
+							"raw": "{\r\n    \"sourceCardId\": \"b39e7825-983d-449c-befd-213da403b584\",\r\n    \"destinationCardId\": \"1b7b93a9-b07c-4d94-bbf1-7c4768d51d30\",\r\n    \"amount\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -335,14 +346,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/giftcard/transfer/63dbba51-17c5-4885-9e94-22adfd0459ab",
+							"raw": "http://localhost:3000/giftcards/transfer/b4a9e632-869f-4702-bf4c-cdf7562eeb58",
+							"protocol": "http",
 							"host": [
-								"{{url}}"
+								"localhost"
 							],
+							"port": "3000",
 							"path": [
-								"giftcard",
+								"giftcards",
 								"transfer",
-								"63dbba51-17c5-4885-9e94-22adfd0459ab"
+								"b4a9e632-869f-4702-bf4c-cdf7562eeb58"
 							]
 						}
 					},
@@ -372,7 +385,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "{{token}}",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiOTBiNWI3ZmUtMWJiMi00MGQzLTgzZTQtMGQ4ZGI5Njg2ODczIiwibmFtZSI6InBydWViYSIsImVtYWlsIjoicHJ1ZWJhQGV4YW1wbGUuY29tIiwiaWF0IjoxNzUyMjAzMDk5LCJleHAiOjE3NTQ3OTUwOTl9.XGy6eJfGB_J4VTEtVOClFqLf_W1E2--Ro2i8LGEQOoY",
 				"type": "string"
 			}
 		]
