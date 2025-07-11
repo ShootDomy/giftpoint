@@ -188,7 +188,15 @@ Headers:
 ### 📥 Importar colección de Postman
 
 Puedes importar la colección de endpoints usando el archivo `postman_collection.json` incluido en este repositorio  
-o [Descargar colección de Postman](./postman/postman_collection.json).
+o [Descargar colección de Postman](./postman/Giftpoint_Dev.postman_collection.json).
+
+## 🚀 Deployment
+
+Este proyecto de backend está desplegado en Railway, una plataforma moderna para desplegar aplicaciones Node.js con facilidad.
+
+🔗 Enlace de producción:
+[https://tu-proyecto.railway.app](https://giftpoint-production.up.railway.app)
+
 
 ## 👨‍💻 Información del Autor
 
