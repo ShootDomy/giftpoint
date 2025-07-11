@@ -17,14 +17,14 @@ export const crearGiftcard = async (req, res, next) => {
   if (!amount || !currency || !expiration_date || !user_id) {
     return res
       .status(400)
-      .json({ success: false, message: "faltan campos requeridos" }, {});
+      .json({ success: false, message: "faltan campos requeridos" });
   }
 
   // Validar monto positivo
   if (typeof amount !== "number" || amount <= 0) {
     return res
       .status(400)
-      .json({ success: false, message: "El monto debe ser positivo" }, {});
+      .json({ success: false, message: "El monto debe ser positivo" });
   }
 
   // Validar formato de fecha (YYYY-MM-DD)
@@ -33,21 +33,21 @@ export const crearGiftcard = async (req, res, next) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(formattedDate)) {
     return res
       .status(400)
-      .json({ success: false, message: "Formato de fecha inválido" }, {});
+      .json({ success: false, message: "Formato de fecha inválido" });
   }
 
   // Validar código de moneda (3 letras)
   if (!/^[A-Z]{3}$/.test(currency)) {
     return res
       .status(400)
-      .json({ success: false, message: "Código de moneda inválido" }, {});
+      .json({ success: false, message: "Código de moneda inválido" });
   }
 
   // Validar UUID
   if (!isUUID(user_id)) {
     return res
       .status(400)
-      .json({ success: false, message: "user_id debe ser un UUID válido" }, {});
+      .json({ success: false, message: "user_id debe ser un UUID válido" });
   }
 
   try {
@@ -72,7 +72,7 @@ export const getGiftcardsByUser = async (req, res, next) => {
   if (!isUUID(req.params.id)) {
     return res
       .status(400)
-      .json({ success: false, message: "user_id debe ser un UUID válido" }, {});
+      .json({ success: false, message: "user_id debe ser un UUID válido" });
   }
 
   if (idSource) {
@@ -135,7 +135,7 @@ export const actualizarGiftcard = async (req, res, next) => {
     if (!id) {
       return res
         .status(400)
-        .json({ success: false, message: "Falta el parámetro id" }, {});
+        .json({ success: false, message: "Falta el parámetro id" });
     }
 
     const giftcard = await actualizarGift(id, req.body);
@@ -158,7 +158,7 @@ export const eliminarGiftcard = async (req, res, next) => {
     if (!id) {
       return res
         .status(400)
-        .json({ success: false, message: "Falta el parámetro id" }, {});
+        .json({ success: false, message: "Falta el parámetro id" });
     }
 
     const giftcard = await eliminarGift(id);

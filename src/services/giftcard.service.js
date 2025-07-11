@@ -34,7 +34,7 @@ export const crearGift = async (data) => {
 
   db.close();
 
-  return { giftcard };
+  return giftcard;
 };
 
 export const getAllGiftcardsByUser = async (
